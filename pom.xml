@@ -66,8 +66,6 @@
     <build>
         <finalName>${project.name}</finalName>
         <defaultGoal>install</defaultGoal>
-        <!-- Where our source directory is -->
-        <sourceDirectory>${basedir}/src/java</sourceDirectory>
         <!-- Include all the resources we need -->
         <resources>
             <resource>

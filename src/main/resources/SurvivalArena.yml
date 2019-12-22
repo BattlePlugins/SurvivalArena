@@ -1,0 +1,45 @@
+ConfigVersion: 2.0
+
+## For more help configuring see the docs
+## https://docs.battleplugins.org/docs/ba/
+## Change this file to customize your match
+
+SurvivalArena:
+  enabled: true
+  prefix: "&b[SurvivalArena]&e"
+  type: SurvivalArena
+  command: sa
+  database: SurvivalArena
+  rated: true
+  joinType: joinPhase
+  victoryCondition: LastManStanding
+  nTeams: 2+
+  teamSize: 1
+  matchTime: 1200
+  secondsTillMatch: 10
+  defaults:
+    options: []
+  preReqs:
+    options: [clearInventory]
+  onEnter:
+    options: [storeAll]
+  onLeave:
+    options: [restoreAll]
+  onPrestart:
+    options: [teleportIn]
+  onJoin:
+    options: []
+  onStart:
+    options: [pvpOn, wgNoLeave, wgNoEnter, blockBreakOff]
+  onSpawn:
+    options: [hunger=20, health=20]
+  onDeath:
+    options: [clearInventory, wgNoEnter]
+  onVictory:
+    options: []
+  onComplete:
+    options: [teleportOut, clearInventory]
+  winner:
+    options: [health=20, hunger=20]
+  losers:
+    options: []

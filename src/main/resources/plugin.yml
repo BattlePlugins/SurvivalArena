@@ -2,6 +2,7 @@ name: ${project.name}
 main: org.battleplugins.survivalarena.SurvivalArenaPlugin
 depend: [BattleArena]
 api-version: 1.13
+version: ${project.version}
 authors: [Stryker76, BattlePlugins]
 description: ${project.description}
 commands:

@@ -60,9 +60,9 @@ public class PlayerListener implements Listener {
 
                     for (ItemStack item : itemsinchest) {
                         if (item != null) {
+                            this.plugin.getConfig().set(itemsetPath + "." + item.getType().name() + ".amount", item.getAmount());
                             Map<Enchantment, Integer> enchants = item.getEnchantments();
                             for (Enchantment e : enchants.keySet()) {
-                                this.plugin.getConfig().set(itemsetPath + "." + item.getType().name() + ".amount", item.getAmount());
                                 String enchantment = e.getName();
                                 int level = enchants.get(e);
 

@@ -1,5 +1,6 @@
 package org.battleplugins.survivalarena;
 
+import mc.alk.arena.alib.bukkitadapter.MaterialAdapter;
 import mc.alk.arena.objects.ArenaPlayer;
 import mc.alk.arena.objects.MatchState;
 import mc.alk.arena.objects.arenas.Arena;
@@ -69,18 +70,24 @@ public class SurvivalArena extends Arena {
                 Chest chest = (Chest) chestLocation.getState();
 
                 if (chestLocation.getState() instanceof Chest) {
-                    int chance = this.plugin.getConfig().getInt(String.valueOf(path) + "." + item + ".chance");
+                    int chance = this.plugin.getConfig().getInt(path + "." + item + ".chance");
                     int result = ThreadLocalRandom.current().nextInt(100);
 
                     if (result <= chance) {
-                        ItemStack itemstack = new ItemStack(Material.matchMaterial(item), 1);
+                        Material mat = MaterialAdapter.getMaterial(item);
+                        if (mat == null) {
+                            Log.warn("Material " + item + " does not exist, make sure you typed it in correctly!");
+                            continue;
+                        }
+
+                        ItemStack itemstack = new ItemStack(MaterialAdapter.getMaterial(item), 1);
                         path = path + "." + item + ".enchantments";
 
                         ConfigurationSection enchantments = this.plugin.getConfig().getConfigurationSection(path);
                         if (enchantments != null) {
                             Set<String> enchants = enchantments.getKeys(false);
                             for (String enchant : enchants) {
-                                int level = this.plugin.getConfig().getInt(String.valueOf(path) + "." + enchant);
+                                int level = this.plugin.getConfig().getInt(path + "." + enchant);
                                 itemstack.addEnchantment(Enchantment.getByName(enchant), level);
                             }
                         }

@@ -32,7 +32,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        int addType = -1;
+        int addType;
 
         if (player.getMetadata("addType").isEmpty()) {
             return;

@@ -21,6 +21,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -30,7 +31,7 @@ public class SurvivalArena extends Arena {
 
     private SurvivalArenaPlugin plugin;
 
-    private int inGracePeriod = 0;
+    private boolean inGracePeriod = false;
     private int suddenDeathPlayers = 0;
 
     private Map<String, Integer> runningTasks;
@@ -121,7 +122,7 @@ public class SurvivalArena extends Arena {
         }
 
         if (gracePeriod > 0) {
-            this.inGracePeriod = 1;
+            this.inGracePeriod = true;
 
             this.getMatch().sendMessage("&eGrace period starting now for " + gracePeriod + " seconds");
 
@@ -183,14 +184,19 @@ public class SurvivalArena extends Arena {
     }
 
     private void endGracePeriod() {
-        this.inGracePeriod = 0;
+        this.inGracePeriod = false;
         getMatch().sendMessage("&eGrace period now over!!");
     }
 
     @ArenaEventHandler(priority = EventPriority.LOW)
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (this.getState() == MatchState.ONPRESTART) {
-            event.getPlayer().teleport(event.getPlayer().getLocation());
+        if (Objects.equals(this.getState(), MatchState.ONPRESTART)) {
+            if (event.getTo().getX() != event.getFrom().getX() ||
+                    event.getTo().getY() != event.getFrom().getY() ||
+                    event.getTo().getZ() != event.getFrom().getZ()) {
+
+                event.setCancelled(true);
+            }
         }
     }
 
@@ -200,7 +206,7 @@ public class SurvivalArena extends Arena {
             return;
         }
 
-        if (this.inGracePeriod == 1) {
+        if (this.inGracePeriod) {
             event.setDamage(0);
             event.setCancelled(true);
         }

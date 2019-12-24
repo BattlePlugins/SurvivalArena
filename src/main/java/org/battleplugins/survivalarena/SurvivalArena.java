@@ -190,7 +190,7 @@ public class SurvivalArena extends Arena {
 
     @ArenaEventHandler(priority = EventPriority.LOW)
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (Objects.equals(this.getState(), MatchState.ONPRESTART)) {
+        if (Objects.equals(this.getState(), MatchState.ONPRESTART) || Objects.equals(this.getState(), MatchState.INPRESTART)) {
             if (event.getTo().getX() != event.getFrom().getX() ||
                     event.getTo().getY() != event.getFrom().getY() ||
                     event.getTo().getZ() != event.getFrom().getZ()) {

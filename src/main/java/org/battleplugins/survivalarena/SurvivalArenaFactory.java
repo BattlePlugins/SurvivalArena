@@ -7,7 +7,7 @@ public class SurvivalArenaFactory implements ArenaFactory {
 
     private SurvivalArenaPlugin plugin;
 
-    public SurvivalArenaFactory(SurvivalArenaPlugin plugin) {
+    SurvivalArenaFactory(SurvivalArenaPlugin plugin) {
         this.plugin = plugin;
     }
 

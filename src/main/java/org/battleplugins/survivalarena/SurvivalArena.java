@@ -54,8 +54,7 @@ public class SurvivalArena extends Arena {
         Set<String> chestIds = chestLocations.getKeys(false);
         for (String chestId : chestIds) {
             String chestInfo = chestLocations.getString(chestId);
-
-            Scanner parseChest = (new Scanner(chestInfo)).useDelimiter(",");
+            Scanner parseChest = new Scanner(chestInfo).useDelimiter(",");
             String world = parseChest.next();
             int x = parseChest.nextInt();
             int y = parseChest.nextInt();
@@ -66,38 +65,36 @@ public class SurvivalArena extends Arena {
 
             ConfigurationSection itemSets = this.plugin.getConfig().getConfigurationSection(path);
             Set<String> itemNames = itemSets.getKeys(false);
-            for (String item : itemNames) {
-                Block chestLocation = Bukkit.getWorld(world).getBlockAt(x, y, z);
-                Chest chest = (Chest) chestLocation.getState();
-
-                if (chestLocation.getState() instanceof Chest) {
-                    int chance = this.plugin.getConfig().getInt(path + "." + item + ".chance");
-                    int result = ThreadLocalRandom.current().nextInt(100);
-
-                    if (result <= chance) {
-                        Material mat = MaterialAdapter.getMaterial(item);
-                        if (mat == null) {
-                            Log.warn("Material " + item + " does not exist, make sure you typed it in correctly!");
-                            continue;
-                        }
-
-                        ItemStack itemstack = new ItemStack(MaterialAdapter.getMaterial(item), 1);
-                        path = path + "." + item + ".enchantments";
-
-                        ConfigurationSection enchantments = this.plugin.getConfig().getConfigurationSection(path);
-                        if (enchantments != null) {
-                            Set<String> enchants = enchantments.getKeys(false);
-                            for (String enchant : enchants) {
-                                int level = this.plugin.getConfig().getInt(path + "." + enchant);
-                                itemstack.addEnchantment(Enchantment.getByName(enchant), level);
-                            }
-                        }
-
-                        chest.getInventory().addItem(itemstack);
-                    }
-                    continue;
-                }
+            Block chestLocation = Bukkit.getWorld(world).getBlockAt(x, y, z);
+            Chest chest = (Chest) chestLocation.getState();
+            if (!(chestLocation.getState() instanceof Chest)) {
                 Log.err("Can't populate, not a valid chest at " + x + " " + y + " " + z);
+                continue;
+            }
+            for (String item : itemNames) {
+                int chance = this.plugin.getConfig().getInt(path + "." + item + ".chance");
+                int result = ThreadLocalRandom.current().nextInt(100);
+
+                if (result <= chance) {
+                    Material mat = MaterialAdapter.getMaterial(item);
+                    if (mat == null) {
+                        Log.warn("Material " + item + " does not exist, make sure you typed it in correctly!");
+                        continue;
+                    }
+
+                    ItemStack itemstack = new ItemStack(MaterialAdapter.getMaterial(item), 1);
+                    path = path + "." + item + ".enchantments";
+                    ConfigurationSection enchantments = this.plugin.getConfig().getConfigurationSection(path);
+                    if (enchantments != null) {
+                        Set<String> enchants = enchantments.getKeys(false);
+                        for (String enchant : enchants) {
+                            int level = this.plugin.getConfig().getInt(path + "." + enchant);
+                            itemstack.addEnchantment(Enchantment.getByName(enchant), level);
+                        }
+                    }
+
+                    chest.getInventory().addItem(itemstack);
+                }
             }
         }
     }
@@ -146,7 +143,7 @@ public class SurvivalArena extends Arena {
         for (String chestId : chestIds) {
             String chestInfo = chestLocations.getString(chestId);
 
-            Scanner parseChest = (new Scanner(chestInfo)).useDelimiter(",");
+            Scanner parseChest = new Scanner(chestInfo).useDelimiter(",");
             String world = parseChest.next();
             int x = parseChest.nextInt();
             int y = parseChest.nextInt();
@@ -161,7 +158,6 @@ public class SurvivalArena extends Arena {
 
             Log.err("Can't clear items, not a valid chest at " + x + " " + y + " " + z);
         }
-
 
         if (this.runningTasks != null) {
             this.runningTasks.values().forEach(Bukkit.getScheduler()::cancelTask);

@@ -105,7 +105,6 @@ public class PlayerListener implements Listener {
                             String chestInfo = chestLocations.getString(chestId);
 
                             Scanner parseChest = (new Scanner(chestInfo)).useDelimiter(",");
-                            String cworld = parseChest.next();
                             int cx = parseChest.nextInt();
                             int cy = parseChest.nextInt();
                             int cz = parseChest.nextInt();
@@ -113,7 +112,6 @@ public class PlayerListener implements Listener {
                             if (x == cx && y == cy && z == cz) {
                                 if (citemSet.compareTo(setName) == 0) {
                                     player.sendMessage(ChatColor.RED + "Chest location already set to " + ChatColor.GREEN + setName);
-
                                     return;
                                 }
                                 chestExists = true;
@@ -138,7 +136,6 @@ public class PlayerListener implements Listener {
                     }
 
                     this.plugin.getConfig().set(chestsPath, chestInfo);
-
                     this.plugin.saveConfig();
                 }
             }

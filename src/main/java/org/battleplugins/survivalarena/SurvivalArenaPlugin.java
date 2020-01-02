@@ -21,12 +21,4 @@ public class SurvivalArenaPlugin extends JavaPlugin {
     public void onDisable() {
         Log.info("[" + getName() + "] v" + getDescription().getVersion() + " disabled");
     }
-
-    @Override
-    public void reloadConfig() {
-        super.reloadConfig();
-
-        getDataFolder().mkdir();
-        saveDefaultConfig();
-    }
 }

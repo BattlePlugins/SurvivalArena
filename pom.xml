@@ -4,7 +4,7 @@
     <groupId>org.battleplugins</groupId>
     <artifactId>SurvivalArena</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
     <name>SurvivalArena</name>
     <description>Hunger Games plugin using BattleArena.</description>
     <properties>

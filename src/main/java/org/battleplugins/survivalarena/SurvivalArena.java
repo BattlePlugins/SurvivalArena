@@ -19,11 +19,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -71,18 +67,19 @@ public class SurvivalArena extends Arena {
                 Log.err("Can't populate, not a valid chest at " + x + " " + y + " " + z);
                 continue;
             }
+            boolean[] occupiedSlots = new boolean[chest.getInventory().getSize()];
             for (String item : itemNames) {
                 int chance = this.plugin.getConfig().getInt(path + "." + item + ".chance");
-                int result = ThreadLocalRandom.current().nextInt(100);
+                int result = ThreadLocalRandom.current().nextInt(0, 100);
 
-                if (result <= chance) {
+                if (chance >= result) {
                     Material mat = MaterialAdapter.getMaterial(item);
                     if (mat == null) {
                         Log.warn("Material " + item + " does not exist, make sure you typed it in correctly!");
                         continue;
                     }
 
-                    ItemStack itemstack = new ItemStack(MaterialAdapter.getMaterial(item), 1);
+                    ItemStack itemstack = new ItemStack(mat, 1);
                     path = path + "." + item + ".enchantments";
                     ConfigurationSection enchantments = this.plugin.getConfig().getConfigurationSection(path);
                     if (enchantments != null) {
@@ -93,7 +90,13 @@ public class SurvivalArena extends Arena {
                         }
                     }
 
-                    chest.getInventory().addItem(itemstack);
+                    int slot;
+                    do {
+                        slot = ThreadLocalRandom.current().nextInt(chest.getInventory().getSize());
+                    } while (occupiedSlots[slot]);
+
+                    occupiedSlots[slot] = true;
+                    chest.getInventory().setItem(slot, itemstack);
                 }
             }
         }
